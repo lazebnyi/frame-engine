@@ -12,7 +12,7 @@ All services run in separate Docker containers and communicate via two Redis Str
 
 ### Prerequisites
 
-- [uv](https://github.com/astral-sh/uv) — Python package manager
+- [uv](https://github.com/astral-sh/uv)
 - Docker
 
 ### Docker Compose
@@ -23,6 +23,27 @@ Copy the example env file, then build and start all services:
 cp .env.example .env
 docker compose up --build
 ```
+
+#### Configuration
+
+All tuneable values live in `.env` (copy `.env.example` as a starting point):
+
+| Variable | Default | Description |
+|---|---|---|
+| `REDIS_URL` | `redis://redis:6379` | Redis connection URL |
+| `SHARED_PATH` | `/shared/batches` | Path for batch `.npy` files |
+| `BATCH_SIZE` | `4` | Number of cameras per batch |
+| `MAX_DRIFT_MS` | `150` | Maximum acceptable timestamp spread across cameras (ms) |
+| `MAX_INFLIGHT_BATCHES` | `4` | Backpressure limit: batches waiting for processing |
+| `BUFFER_MAXLEN` | `10` | Per-camera frame buffer depth |
+| `BACKOFF_INITIAL` | `0.5` | Initial reconnect delay after camera disconnect (s) |
+| `BACKOFF_FACTOR` | `2.0` | Backoff multiplier on each consecutive failure |
+| `BACKOFF_MAX` | `30.0` | Maximum reconnect delay (s) |
+| `STABLE_FRAMES` | `5` | Consecutive frames before backoff resets |
+| `HEALTH_INTERVAL_S` | `5.0` | How often the camera monitor checks for silent cameras (s) |
+| `CAMERA_TIMEOUT_S` | `10.0` | Silence duration before a camera is flagged as stuck (s) |
+| `GPU_LATENCY_MS` | `20` | Simulated inference latency (ms) |
+    
 
 This starts `redis`, `stream_reader`, `frame_processor`, and `reporter` with a shared RAM-backed tmpfs volume for batch data.
 
@@ -79,23 +100,3 @@ The `Batcher` aligns cameras frames with a nearest-neighbour algorithm:
 - If a camera **stops** producing frames for more than `camera_timeout_s` seconds, a warning is logged indicating it may be stuck.
 
 Camera capture threads also recover automatically from disconnects using **exponential backoff**: the retry delay doubles on each failure (`BACKOFF_FACTOR`) up to `BACKOFF_MAX` seconds. Once a camera produces `STABLE_FRAMES` consecutive successful frames, the backoff resets to `BACKOFF_INITIAL`.
-
-## Configuration
-
-All tuneable values live in `.env` (copy `.env.example` as a starting point):
-
-| Variable | Default | Description |
-|---|---|---|
-| `REDIS_URL` | `redis://redis:6379` | Redis connection URL |
-| `SHARED_PATH` | `/shared/batches` | Path for batch `.npy` files |
-| `BATCH_SIZE` | `4` | Number of cameras per batch |
-| `MAX_DRIFT_MS` | `150` | Maximum acceptable timestamp spread across cameras (ms) |
-| `MAX_INFLIGHT_BATCHES` | `4` | Backpressure limit: batches waiting for processing |
-| `BUFFER_MAXLEN` | `10` | Per-camera frame buffer depth |
-| `BACKOFF_INITIAL` | `0.5` | Initial reconnect delay after camera disconnect (s) |
-| `BACKOFF_FACTOR` | `2.0` | Backoff multiplier on each consecutive failure |
-| `BACKOFF_MAX` | `30.0` | Maximum reconnect delay (s) |
-| `STABLE_FRAMES` | `5` | Consecutive frames before backoff resets |
-| `HEALTH_INTERVAL_S` | `5.0` | How often the camera monitor checks for silent cameras (s) |
-| `CAMERA_TIMEOUT_S` | `10.0` | Silence duration before a camera is flagged as stuck (s) |
-| `GPU_LATENCY_MS` | `20` | Simulated inference latency (ms) |
