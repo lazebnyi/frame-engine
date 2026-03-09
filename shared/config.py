@@ -34,8 +34,8 @@ class PipelineConfig:
     )
     batch_size: int = 4
     max_drift_ms: float = 150.0
-    frame_queue_maxsize: int = 100   # per-camera frame buffer; 0 = unbounded
-    batch_queue_maxsize: int = 10    # assembled batches waiting for publish
+    frame_queue_maxsize: int = 100  # per-camera frame buffer; 0 = unbounded
+    batch_queue_maxsize: int = 10  # assembled batches waiting for publish
     health_interval_s: float = 5.0  # watchdog check frequency
     camera_timeout_s: float = 10.0  # warn if a camera is silent for this long
 
@@ -55,11 +55,19 @@ class PipelineConfig:
         cameras = [CameraConfig(**c) for c in raw.get("cameras", DEFAULT_CAMERAS)]
 
         return cls(
-            cameras             = cameras,
-            batch_size          = int(os.environ.get("BATCH_SIZE",           raw.get("batch_size",          4))),
-            max_drift_ms        = float(os.environ.get("MAX_DRIFT_MS",       raw.get("max_drift_ms",        150.0))),
-            frame_queue_maxsize = int(os.environ.get("FRAME_QUEUE_MAXSIZE",  raw.get("frame_queue_maxsize", 100))),
-            batch_queue_maxsize = int(os.environ.get("BATCH_QUEUE_MAXSIZE",  raw.get("batch_queue_maxsize", 10))),
-            health_interval_s   = float(os.environ.get("HEALTH_INTERVAL_S", raw.get("health_interval_s",   5.0))),
-            camera_timeout_s    = float(os.environ.get("CAMERA_TIMEOUT_S",  raw.get("camera_timeout_s",    10.0))),
+            cameras=cameras,
+            batch_size=int(os.environ.get("BATCH_SIZE", raw.get("batch_size", 4))),
+            max_drift_ms=float(os.environ.get("MAX_DRIFT_MS", raw.get("max_drift_ms", 150.0))),
+            frame_queue_maxsize=int(
+                os.environ.get("FRAME_QUEUE_MAXSIZE", raw.get("frame_queue_maxsize", 100))
+            ),
+            batch_queue_maxsize=int(
+                os.environ.get("BATCH_QUEUE_MAXSIZE", raw.get("batch_queue_maxsize", 10))
+            ),
+            health_interval_s=float(
+                os.environ.get("HEALTH_INTERVAL_S", raw.get("health_interval_s", 5.0))
+            ),
+            camera_timeout_s=float(
+                os.environ.get("CAMERA_TIMEOUT_S", raw.get("camera_timeout_s", 10.0))
+            ),
         )

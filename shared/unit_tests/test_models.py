@@ -1,4 +1,4 @@
-from shared.models import FrameMeta, BatchMeta, InferenceResult
+from shared.models import BatchMeta, FrameMeta, InferenceResult
 
 
 def test_batch_meta_round_trip():
@@ -24,8 +24,12 @@ def test_batch_meta_round_trip():
 
 def test_batch_meta_from_json_accepts_bytes():
     meta = BatchMeta(
-        batch_id="b1", file_path="/tmp/b1.npy", camera_ids=["cam_01"],
-        drift_ms=0.0, timestamp=0.0, shape=[1, 2, 3, 4],
+        batch_id="b1",
+        file_path="/tmp/b1.npy",
+        camera_ids=["cam_01"],
+        drift_ms=0.0,
+        timestamp=0.0,
+        shape=[1, 2, 3, 4],
     )
     restored = BatchMeta.from_json(meta.to_json().encode())
     assert restored.batch_id == "b1"
@@ -56,8 +60,12 @@ def test_inference_result_from_json_accepts_bytes():
 
 def test_batch_meta_empty_frames_meta():
     meta = BatchMeta(
-        batch_id="no-frames", file_path="/tmp/x.npy", camera_ids=[],
-        drift_ms=0.0, timestamp=0.0, shape=[0, 2160, 3840, 3],
+        batch_id="no-frames",
+        file_path="/tmp/x.npy",
+        camera_ids=[],
+        drift_ms=0.0,
+        timestamp=0.0,
+        shape=[0, 2160, 3840, 3],
     )
     restored = BatchMeta.from_json(meta.to_json())
     assert restored.frames_meta == []

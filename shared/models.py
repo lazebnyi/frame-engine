@@ -13,8 +13,8 @@ class Frame:
 
     camera_id: str
     frame_number: int
-    data: np.ndarray            # shape (H, W, C), dtype uint8
-    timestamp: float = 0.0      # monotonic capture time (seconds)
+    data: np.ndarray  # shape (H, W, C), dtype uint8
+    timestamp: float = 0.0  # monotonic capture time (seconds)
 
 
 @dataclass
@@ -23,7 +23,7 @@ class FrameMeta:
 
     camera_id: str
     frame_number: int
-    captured_at: float       # monotonic time at capture (seconds)
+    captured_at: float  # monotonic time at capture (seconds)
 
 
 @dataclass
@@ -31,11 +31,11 @@ class BatchMeta:
     """Batch metadata published to Redis after a batch is written to the shared volume."""
 
     batch_id: str
-    file_path: str           # absolute path on the shared volume
+    file_path: str  # absolute path on the shared volume
     camera_ids: list[str]
     drift_ms: float
-    timestamp: float         # monotonic capture time of the batch
-    shape: list[int]         # [N, H, W, C]
+    timestamp: float  # monotonic capture time of the batch
+    shape: list[int]  # [N, H, W, C]
     frames_meta: list[FrameMeta] = field(default_factory=list)
 
     def to_json(self) -> str:
