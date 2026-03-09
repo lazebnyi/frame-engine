@@ -10,7 +10,6 @@ class Reporter:
     """Consume inference results and emit structured log lines."""
 
     def report(self, result: InferenceResult) -> None:
-        """Log one structured line per frame in the batch."""
         now = time.monotonic()
         for fm in result.frames_meta:
             e2e_ms = (now - fm.captured_at) * 1000
