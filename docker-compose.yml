@@ -1,0 +1,58 @@
+services:
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save "" --appendonly no
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  stream_reader:
+    build:
+      context: .
+      dockerfile: stream_reader/Dockerfile
+    volumes:
+      - batch_frames:/shared/batches
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_URL:            ${REDIS_URL}
+      SHARED_PATH:          ${SHARED_PATH}
+      BATCH_SIZE:           ${BATCH_SIZE}
+      MAX_DRIFT_MS:         ${MAX_DRIFT_MS}
+      MAX_INFLIGHT_BATCHES: ${MAX_INFLIGHT_BATCHES}
+
+  frame_processor:
+    build:
+      context: .
+      dockerfile: frame_processor/Dockerfile
+    volumes:
+      - batch_frames:/shared/batches
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_URL:      ${REDIS_URL}
+      SHARED_PATH:    ${SHARED_PATH}
+      GPU_LATENCY_MS: ${GPU_LATENCY_MS}
+
+  reporter:
+    build:
+      context: .
+      dockerfile: reporter/Dockerfile
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_URL: ${REDIS_URL}
+
+volumes:
+  batch_frames:
+    driver_opts:
+      type:   tmpfs
+      device: tmpfs

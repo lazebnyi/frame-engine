@@ -1,0 +1,21 @@
+# Environment
+.env
+
+# Python
+.python-version
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+
+# Pytest
+.pytest_cache/
+.coverage
+
+# Batch data files
+*.npy
+
+# macOS
+.DS_Store
