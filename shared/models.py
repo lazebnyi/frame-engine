@@ -1,5 +1,3 @@
-"""Shared data models passed between pipeline services via Redis."""
-
 import json
 import time
 from dataclasses import asdict, dataclass, field
@@ -19,7 +17,7 @@ class Frame:
 
 @dataclass
 class FrameMeta:
-    """Per-frame metadata carried through the pipeline (no pixel data)."""
+    """Framemetadata carried through the pipeline (no pixel data)."""
 
     camera_id: str
     frame_number: int
@@ -35,7 +33,8 @@ class BatchMeta:
     camera_ids: list[str]
     drift_ms: float
     timestamp: float  # monotonic capture time of the batch
-    shape: list[int]  # [N, H, W, C]
+    # [N, H, W, C]: number of frames, height in pixels, width in pixels, colour channels
+    shape: list[int]
     frames_meta: list[FrameMeta] = field(default_factory=list)
 
     def to_json(self) -> str:
