@@ -13,7 +13,7 @@ All services run in separate Docker containers and communicate via two Redis Str
 ### Prerequisites
 
 - [uv](https://github.com/astral-sh/uv)
-- Docker
+- [Docker](https://www.docker.com/)
 
 ### Docker Compose
 
