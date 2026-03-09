@@ -8,6 +8,36 @@ First the cameras start capturing video streams, and each camera runs in its own
 
 All services run in separate Docker containers and communicate via two Redis Streams. Batch pixel data is exchanged through a RAM-backed tmpfs shared volume, keeping Redis free of large payloads.
 
+## Running
+
+### Prerequisites
+
+- [uv](https://github.com/astral-sh/uv) — Python package manager
+- Docker
+
+### Docker Compose
+
+Copy the example env file, then build and start all services:
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+This starts `redis`, `stream_reader`, `frame_processor`, and `reporter` with a shared RAM-backed tmpfs volume for batch data.
+
+### Unit tests
+
+```bash
+uv run pytest
+```
+
+### Linting
+
+```bash
+uv run ruff check .
+```
+
 ## Services
 
 ### stream_reader
@@ -69,33 +99,3 @@ All tuneable values live in `.env` (copy `.env.example` as a starting point):
 | `HEALTH_INTERVAL_S` | `5.0` | How often the camera monitor checks for silent cameras (s) |
 | `CAMERA_TIMEOUT_S` | `10.0` | Silence duration before a camera is flagged as stuck (s) |
 | `GPU_LATENCY_MS` | `20` | Simulated inference latency (ms) |
-
-## Running
-
-### Prerequisites
-
-- [uv](https://github.com/astral-sh/uv) — Python package manager
-- Docker
-
-### Docker Compose (recommended)
-
-Copy the example env file, then build and start all services:
-
-```bash
-cp .env.example .env
-docker compose up --build
-```
-
-This starts `redis`, `stream_reader`, `frame_processor`, and `reporter` with a shared RAM-backed tmpfs volume for batch data.
-
-### Unit tests
-
-```bash
-uv run pytest
-```
-
-### Linting
-
-```bash
-uv run ruff check .
-```
