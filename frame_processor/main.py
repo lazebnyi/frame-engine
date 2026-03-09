@@ -1,11 +1,3 @@
-"""Frame Processor — Processing service entry point.
-
-Pipeline per batch
-------------------
-1. Preprocess  — resize each frame 3840×2160 → 640×480, convert to grayscale
-2. Inference   — time.sleep(0.1) simulating model latency
-"""
-
 import logging
 import os
 import signal

@@ -34,26 +34,7 @@ class Batch:
 
 
 class Batcher:
-    """Collect frames from *in_queue* and emit time-aligned batches.
-
-    **Sync algorithm** (nearest-neighbour):
-
-    1. Maintain a per-camera deque of recent frames.
-    2. When all ``batch_size`` cameras have at least one frame, compute a
-       *reference time* = ``max(oldest_frame.timestamp for each camera)``.
-       This is the first moment every camera has coverage.
-    3. For each camera pick the frame whose timestamp is closest to the
-       reference time.
-    4. If the resulting *drift* (max_ts − min_ts) ≤ ``max_drift_ms``: emit
-       the batch and discard consumed frames.
-    5. Otherwise drop the oldest frame of the most-behind camera and retry
-       on the next incoming frame.
-    6. On queue timeout flush whatever is buffered as a partial batch so the
-       downstream stage is never permanently starved.
-
-    **Backpressure**: if *out_queue* is full the batch is dropped and a
-    warning is logged rather than blocking indefinitely.
-    """
+    """Collect frames from *in_queue* and emit time-aligned batches."""
 
     def __init__(
         self,

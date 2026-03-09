@@ -22,7 +22,6 @@ class Publisher:
         self._shared_path = shared_path
 
     def publish(self, batch: Batch) -> None:
-        """Save batch data to shared volume and publish metadata to Redis."""
         batch_id = str(uuid.uuid4())
         file_path = os.path.join(self._shared_path, f"{batch_id}.npy")
         np.save(file_path, batch.data)

@@ -1,5 +1,3 @@
-"""Stream Reader — Capture service."""
-
 import logging
 import os
 import queue

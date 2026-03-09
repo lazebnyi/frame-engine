@@ -1,5 +1,3 @@
-"""Reporter — Final consumer service."""
-
 import logging
 import os
 import signal
