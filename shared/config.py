@@ -1,11 +1,3 @@
-"""Pipeline configuration.
-
-Load priority (highest → lowest):
-    1. Environment variables (e.g. BATCH_SIZE, MAX_DRIFT_MS)
-    2. JSON file at CONFIG_PATH
-    3. Dataclass defaults
-"""
-
 import json
 import logging
 import os
