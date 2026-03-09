@@ -1,0 +1,27 @@
+[project]
+name = "frame-engine"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "redis>=5.0",
+    "pillow>=10.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0", "ruff>=0.4"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = [
+    "stream_reader/unit_tests",
+    "frame_processor/unit_tests",
+    "reporter/unit_tests",
+    "shared/unit_tests",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]   # pycodestyle, pyflakes, isort
